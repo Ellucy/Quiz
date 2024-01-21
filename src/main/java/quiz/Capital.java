@@ -22,7 +22,6 @@ public class Capital {
     @Column(name = "capital_name", unique = true)
     private String capitalName;
 
-    @OneToOne
-    @JoinColumn(name = "city_id")
+    @OneToOne(mappedBy = "capital")
     private City city;
 }

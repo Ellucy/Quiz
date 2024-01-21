@@ -22,6 +22,7 @@ public class City {
     @Column(name="city_name", unique = true)
     private String cityName;
 
-    @OneToOne(mappedBy = "city", cascade = CascadeType.ALL, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "capital_id", unique = true, nullable = false)
     private Capital capital;
 }
