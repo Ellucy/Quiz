@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,21 +19,35 @@ public class Main {
 
             Transaction transaction = session.beginTransaction();
 
-            String[] cityNames = {"France", "Japan", "Italy", "Germany", "Russia", "China", "Egypt", "Australia", "India", "Canada", "Kenya", "Mexico", "Argentina", "South Korea", "Saudi Arabia", "Estonia", "Norway", "Poland", "Portugal", "Finland"};
-            String[] capitalNames = {"Paris", "Tokyo", "Rome", "Berlin", "Moscow", "Beijing", "Cairo", "Sydney", "Delhi", "Ottawa", "Nairobi", "Mexico City", "Buenos Aires", "Seoul", "Riyadh", "Tallinn", "Oslo", "Warsaw", "Lisbon", "Helsinki"};
+            String[] cityNames = {"France", "Japan", "Italy", "Germany", "Russia", "China", "Egypt", "Australia", "India", "Canada", "Kenya", "Mexico", "Argentina", "South Korea", "Saudi Arabia", "Estonia", "Norway", "Poland", "Portugal", "Finland", "Latvia"};
+            String[] capitalNames = {"Paris", "Tokyo", "Rome", "Berlin", "Moscow", "Beijing", "Cairo", "Sydney", "Delhi", "Ottawa", "Nairobi", "Mexico City", "Buenos Aires", "Seoul", "Riyadh", "Tallinn", "Oslo", "Warsaw", "Lisbon", "Helsinki", "Riga"};
 
             if (cityNames.length == capitalNames.length) {
                 for (int i = 0; i < cityNames.length; i++) {
-                    City city = new City();
-                    city.setCityName(cityNames[i]);
 
-                    Capital capital = new Capital();
-                    capital.setCapitalName(capitalNames[i]);
+                    // Check if city exists
+                    Query<City> cityQuery = session.createQuery("FROM City WHERE cityName = :name", City.class);
+                    cityQuery.setParameter("name", cityNames[i]);
+                    City existingCity = cityQuery.uniqueResult();
 
-                    city.setCapital(capital);
-                    capital.setCity(city);
+                    // Check if capital exists
+                    Query<Capital> capitalQuery = session.createQuery("FROM Capital WHERE capitalName = :name", Capital.class);
+                    capitalQuery.setParameter("name", capitalNames[i]);
+                    Capital existingCapital = capitalQuery.uniqueResult();
 
-                    session.persist(city);
+                    // Persist city and capital
+                    if (existingCity == null && existingCapital == null) {
+                        City city = new City();
+                        city.setCityName(cityNames[i]);
+
+                        Capital capital = new Capital();
+                        capital.setCapitalName(capitalNames[i]);
+
+                        city.setCapital(capital);
+                        capital.setCity(city);
+
+                        session.persist(city);
+                    }
                 }
                 transaction.commit();
             } else {
