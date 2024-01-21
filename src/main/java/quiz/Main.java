@@ -70,7 +70,6 @@ public class Main {
         } else {
             Engine.playGame(session, cities, capitals);
         }
-
         transaction.commit();
     }
 

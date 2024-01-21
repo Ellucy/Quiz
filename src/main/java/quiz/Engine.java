@@ -32,8 +32,23 @@ public class Engine {
                 System.out.println((j + 1) + ". " + options.get(j).getCapitalName());
             }
 
-            // User input
-            int userChoice = scanner.nextInt();
+            boolean isValid = false;
+            int userChoice = 0;
+
+            while(!isValid) {
+                try {
+                    userChoice = scanner.nextInt();
+                    if (userChoice >= 1 && userChoice <= options.size()) {
+                        isValid = true;
+                    } else {
+                        System.out.println("Invalid number. Please enter a number between 1 and " + options.size());
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next();
+                }
+            }
+
 
             // Check if the user's choice is correct
             if (options.get(userChoice - 1).equals(correctCapital)) {
