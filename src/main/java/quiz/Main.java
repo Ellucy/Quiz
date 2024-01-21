@@ -6,7 +6,10 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import java.util.*;
+
 public class Main {
+
     public static void main(String[] args) {
 
         SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml")
@@ -58,6 +61,16 @@ public class Main {
                 session.persist(city);
             }
         }
+
+        List<City> cities = session.createQuery("FROM City", City.class).getResultList();
+        List<Capital> capitals = session.createQuery("FROM Capital", Capital.class).getResultList();
+
+        if (cities.size() < 5 || capitals.size() < 5) {
+            System.out.println("Not enough data to play the game.");
+        } else {
+            Engine.playGame(session, cities, capitals);
+        }
+
         transaction.commit();
     }
 
