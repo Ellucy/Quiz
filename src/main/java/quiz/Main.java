@@ -78,7 +78,7 @@ public class Main {
                 res = scanner.nextLine().toLowerCase().charAt(0);
 
                 if (res == 'w') {
-                    Engine.playWindowGame();
+                    Engine.playWindowGame(session, cities, capitals);
                 } else if (res == 't') {
                     Engine.playTerminalGame(session, cities, capitals);
                 } else {

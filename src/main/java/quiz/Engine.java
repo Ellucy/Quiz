@@ -5,12 +5,22 @@ import quiz.panelsframes.MyFrame;
 
 import java.util.*;
 
-import static quiz.TerminalGame.playTerminalGame;
-
 public class Engine {
 
-    public static void playWindowGame() {
-        new MyFrame();
+    public static void playWindowGame(Session session, List<City> cities, List<Capital> capitals) {
+        Random random = new Random();
+
+        City selectedCity = cities.get(random.nextInt(cities.size()));
+        Capital correctCapital = selectedCity.getCapital();
+        List<Capital> distractors = getDistractors(capitals, correctCapital);
+
+        List<String> options = new ArrayList<>(List.of(correctCapital.getCapitalName(),
+                distractors.get(0).getCapitalName(), distractors.get(1).getCapitalName(), distractors.get(2).getCapitalName()));
+
+        Collections.shuffle(options);
+
+        new MyFrame("What is the capital of " + selectedCity.getCityName() + "?", options, correctCapital);
+
     }
 
     public static void playTerminalGame(Session session, List<City> cities, List<Capital> capitals) {

@@ -1,14 +1,17 @@
 package quiz.panelsframes;
 
+import quiz.Capital;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class MyFrame extends JFrame {
 
-    public MyFrame() {
+    public MyFrame(String questionText, List<String> answerOptions, Capital correctAnswer) {
 
-        QuestionPanel questionPanel = new QuestionPanel("What is the capital of France?");
-        RadiobuttonPanel panel = new RadiobuttonPanel();
+        QuestionPanel questionPanel = new QuestionPanel(questionText);
+        RadiobuttonPanel panel = new RadiobuttonPanel(answerOptions, correctAnswer);
         BackgroundPanel backgroundPanel = new BackgroundPanel("src/main/resources/background.jpg");
 
 

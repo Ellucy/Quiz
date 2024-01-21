@@ -1,55 +1,67 @@
 package quiz.panelsframes;
 
+import quiz.Capital;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Objects;
 
 public class RadiobuttonPanel extends JPanel implements ActionListener {
 
-    JRadioButton capitalButton;
-    JRadioButton distractorButton1;
-    JRadioButton distractorButton2;
-    JRadioButton distractorButton3;
+    JRadioButton firstButton;
+    JRadioButton secondButton;
+    JRadioButton thirdButton;
+    JRadioButton fourthButton;
+    private Capital correctAnswer;
 
-    RadiobuttonPanel() {
+    RadiobuttonPanel(List<String> answerOptions, Capital correctAnswer) {
+
+        this.correctAnswer = correctAnswer;
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
         setPreferredSize(new Dimension(600, 150));
 
-        capitalButton = new JRadioButton("Paris");
-        distractorButton1 = new JRadioButton("Tallinn");
-        distractorButton2 = new JRadioButton("Tokyo");
-        distractorButton3 = new JRadioButton("Rome");
+        firstButton = new JRadioButton(answerOptions.get(0));
+        secondButton = new JRadioButton(answerOptions.get(1));
+        thirdButton = new JRadioButton(answerOptions.get(2));
+        fourthButton = new JRadioButton(answerOptions.get(3));
 
         Font font = new Font("Arial", Font.PLAIN, 28);
 
-        capitalButton.setFont(font);
-        distractorButton1.setFont(font);
-        distractorButton2.setFont(font);
-        distractorButton3.setFont(font);
+        firstButton.setFont(font);
+        secondButton.setFont(font);
+        thirdButton.setFont(font);
+        fourthButton.setFont(font);
 
         ButtonGroup group = new ButtonGroup();
-        group.add(capitalButton);
-        group.add(distractorButton1);
-        group.add(distractorButton2);
-        group.add(distractorButton3);
+        group.add(firstButton);
+        group.add(secondButton);
+        group.add(thirdButton);
+        group.add(fourthButton);
 
-        this.add(capitalButton);
-        this.add(distractorButton1);
-        this.add(distractorButton2);
-        this.add(distractorButton3);
+        this.add(firstButton);
+        this.add(secondButton);
+        this.add(thirdButton);
+        this.add(fourthButton);
 
-        capitalButton.addActionListener(this);
-        distractorButton1.addActionListener(this);
-        distractorButton2.addActionListener(this);
-        distractorButton3.addActionListener(this);
+        firstButton.addActionListener(this);
+        secondButton.addActionListener(this);
+        thirdButton.addActionListener(this);
+        fourthButton.addActionListener(this);
 
         this.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == capitalButton) {
+        JRadioButton selectedButton = (JRadioButton) e.getSource();
+
+//        System.out.println("Selected: " + selectedButton.getText());
+//        System.out.println(correctAnswer.getCapitalName());
+
+        if (selectedButton.getText().equals(correctAnswer.getCapitalName())) {
             System.out.println("Correct value");
         } else {
             System.out.println("Sorry, you missed");
