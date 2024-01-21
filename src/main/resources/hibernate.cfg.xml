@@ -19,7 +19,5 @@
         <!-- Update the database schema on startup -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <mapping class="Student"/>
-
     </session-factory>
 </hibernate-configuration>
