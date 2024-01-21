@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import quiz.panelsframes.MyFrame;
 
 import java.util.*;
 
@@ -68,9 +69,25 @@ public class Main {
         if (cities.size() < 5 || capitals.size() < 5) {
             System.out.println("Not enough data to play the game.");
         } else {
-            Engine.playGame(session, cities, capitals);
-        }
-        transaction.commit();
-    }
+            Scanner scanner = new Scanner(System.in);
+            char res;
 
+            do{
+                System.out.println("Do you want to play in the terminal (t) or in a new window (w)?");
+
+                res = scanner.nextLine().toLowerCase().charAt(0);
+
+                if (res == 'w') {
+                    Engine.playWindowGame();
+                } else if (res == 't') {
+                    Engine.playTerminalGame(session, cities, capitals);
+                } else {
+                    System.out.println("Invalid input. Please enter 't' or 'w'.");
+                }
+
+            } while (res != 't' && res != 'w');
+
+            transaction.commit();
+        }
+    }
 }
