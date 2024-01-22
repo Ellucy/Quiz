@@ -7,15 +7,14 @@ import quiz.City;
 import quiz.QuizQuestion;
 
 import javax.swing.*;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class WindowEngine {
 
     private static final int TOTAL_QUESTIONS = 5;
     @Getter
     private static int currentQuestionNumber = 0;
+    private static Set<City> usedCities = new HashSet<>();
 
     public static void playWindowGame(Session session, List<City> cities, List<Capital> capitals) {
         loadNextQuestion(session, cities, capitals);
@@ -27,7 +26,13 @@ public class WindowEngine {
             currentQuestionNumber++;
             Random random = new Random();
 
-            City selectedCity = cities.get(random.nextInt(cities.size()));
+            City selectedCity;
+            do {
+                selectedCity = cities.get(random.nextInt(cities.size()));
+            } while (usedCities.contains(selectedCity));
+
+            usedCities.add(selectedCity);
+
             Capital correctCapital = selectedCity.getCapital();
             List<Capital> distractors = getDistractors(capitals, correctCapital);
 

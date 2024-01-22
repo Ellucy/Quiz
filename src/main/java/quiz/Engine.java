@@ -8,6 +8,8 @@ import java.util.*;
 
 public class Engine {
 
+    private static Set<City> usedCities = new HashSet<>();
+
     public static void playTerminalGame(Session session, List<City> cities, List<Capital> capitals) {
 
         final int NUM_QUESTIONS = 5;
@@ -18,7 +20,12 @@ public class Engine {
 
         for (int i = 0; i < NUM_QUESTIONS; i++) {
 
-            City selectedCity = cities.get(random.nextInt(cities.size()));
+            City selectedCity;
+            do {
+                selectedCity = cities.get(random.nextInt(cities.size()));
+            } while (usedCities.contains(selectedCity));
+
+            usedCities.add(selectedCity);
 
             Capital correctCapital = selectedCity.getCapital();
 
