@@ -3,24 +3,29 @@ package quiz;
 import org.hibernate.Session;
 import quiz.panelsframes.MyFrame;
 
+import javax.swing.*;
 import java.util.*;
 
 public class Engine {
 
     public static void playWindowGame(Session session, List<City> cities, List<Capital> capitals) {
-        Random random = new Random();
 
-        City selectedCity = cities.get(random.nextInt(cities.size()));
-        Capital correctCapital = selectedCity.getCapital();
-        List<Capital> distractors = getDistractors(capitals, correctCapital);
-
-        List<String> options = new ArrayList<>(List.of(correctCapital.getCapitalName(),
-                distractors.get(0).getCapitalName(), distractors.get(1).getCapitalName(), distractors.get(2).getCapitalName()));
-
-        Collections.shuffle(options);
-
-        new MyFrame("What is the capital of " + selectedCity.getCityName() + "?", options, correctCapital);
-
+//        final int NUM_QUESTIONS = 5;
+//        int score = 0;
+//
+//        Random random = new Random();
+//
+//        City selectedCity = cities.get(random.nextInt(cities.size()));
+//        Capital correctCapital = selectedCity.getCapital();
+//        List<Capital> distractors = getDistractors(capitals, correctCapital);
+//
+//        List<String> options = new ArrayList<>(List.of(correctCapital.getCapitalName(),
+//                distractors.get(0).getCapitalName(), distractors.get(1).getCapitalName(), distractors.get(2).getCapitalName()));
+//
+//        Collections.shuffle(options);
+//
+//        new MyFrame("What is the capital of " + selectedCity.getCityName() + "?", options, correctCapital);
+        loadNextQuestion(session, cities, capitals);
     }
 
     public static void playTerminalGame(Session session, List<City> cities, List<Capital> capitals) {
@@ -90,4 +95,30 @@ public class Engine {
             // Take three capitals as distractors
             return allCapitals.subList(0, 3);
         }
+
+    public static void loadNextQuestion(Session session, List<City> cities, List<Capital> capitals) {
+        Random random = new Random();
+
+        City selectedCity = cities.get(random.nextInt(cities.size()));
+        System.out.println(selectedCity.getCityName());
+        Capital correctCapital = selectedCity.getCapital();
+        List<Capital> distractors = getDistractors(capitals, correctCapital);
+
+        QuizQuestion quizQuestion = new QuizQuestion(
+                "What is the capital of " + selectedCity.getCityName() + "?",
+                correctCapital, distractors);
+
+        // Display the new question using the GUI
+        displayQuestion(session, quizQuestion, cities, capitals);
+    }
+
+    private static void displayQuestion(Session session, QuizQuestion quizQuestion, List<City> cities, List<Capital> capitals) {
+        // Shuffle the answer options
+        List<Capital> options = quizQuestion.getAnswerOptions();
+        Collections.shuffle(options);
+
+        SwingUtilities.invokeLater(() -> {
+            new MyFrame(quizQuestion.getQuestion(), options, quizQuestion.getCorrectAnswer(), session, cities, capitals);
+        });
+    }
 }

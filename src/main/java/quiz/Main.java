@@ -62,6 +62,7 @@ public class Main {
                 session.persist(city);
             }
         }
+        transaction.commit();
 
         List<City> cities = session.createQuery("FROM City", City.class).getResultList();
         List<Capital> capitals = session.createQuery("FROM Capital", Capital.class).getResultList();
@@ -86,8 +87,6 @@ public class Main {
                 }
 
             } while (res != 't' && res != 'w');
-
-            transaction.commit();
         }
     }
 }

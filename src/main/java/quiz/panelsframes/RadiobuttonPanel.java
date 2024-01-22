@@ -15,18 +15,26 @@ public class RadiobuttonPanel extends JPanel implements ActionListener {
     JRadioButton secondButton;
     JRadioButton thirdButton;
     JRadioButton fourthButton;
+
     private Capital correctAnswer;
+    private String selectedAnswer;
+    protected QuizCallback quizCallback;
+    private List<Capital> answerOptions;
 
-    RadiobuttonPanel(List<String> answerOptions, Capital correctAnswer) {
 
+    RadiobuttonPanel(List<Capital> answerOptions, Capital correctAnswer, QuizCallback quizCallback) {
+
+        this.answerOptions = answerOptions;
         this.correctAnswer = correctAnswer;
+        this.quizCallback = quizCallback;
+
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
         setPreferredSize(new Dimension(600, 150));
 
-        firstButton = new JRadioButton(answerOptions.get(0));
-        secondButton = new JRadioButton(answerOptions.get(1));
-        thirdButton = new JRadioButton(answerOptions.get(2));
-        fourthButton = new JRadioButton(answerOptions.get(3));
+        firstButton = new JRadioButton(answerOptions.get(0).getCapitalName());
+        secondButton = new JRadioButton(answerOptions.get(1).getCapitalName());
+        thirdButton = new JRadioButton(answerOptions.get(2).getCapitalName());
+        fourthButton = new JRadioButton(answerOptions.get(3).getCapitalName());
 
         Font font = new Font("Arial", Font.PLAIN, 28);
 
@@ -51,20 +59,33 @@ public class RadiobuttonPanel extends JPanel implements ActionListener {
         thirdButton.addActionListener(this);
         fourthButton.addActionListener(this);
 
+        add(firstButton);
+        add(secondButton);
+        add(thirdButton);
+        add(fourthButton);
+
+
         this.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JRadioButton selectedButton = (JRadioButton) e.getSource();
+        selectedAnswer = selectedButton.getText();
 
-//        System.out.println("Selected: " + selectedButton.getText());
-//        System.out.println(correctAnswer.getCapitalName());
+        Capital selectedCapital = answerOptions.stream()
+                .filter(capital -> capital.getCapitalName().equals(selectedAnswer))
+                .findFirst()
+                .orElse(null);
 
-        if (selectedButton.getText().equals(correctAnswer.getCapitalName())) {
+        if (selectedCapital != null && selectedCapital.equals(correctAnswer)) {
             System.out.println("Correct value");
+            if (quizCallback != null) {
+                quizCallback.onQuestionAnswered(true);
+            }
         } else {
             System.out.println("Sorry, you missed");
+            quizCallback.onQuestionAnswered(false);
         }
     }
 }
