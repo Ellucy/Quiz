@@ -79,12 +79,10 @@ public class RadiobuttonPanel extends JPanel implements ActionListener {
                 .orElse(null);
 
         if (selectedCapital != null && selectedCapital.equals(correctAnswer)) {
-            System.out.println("Correct value");
             if (quizCallback != null) {
                 quizCallback.onQuestionAnswered(true);
             }
         } else {
-            System.out.println("Sorry, you missed");
             quizCallback.onQuestionAnswered(false);
         }
     }

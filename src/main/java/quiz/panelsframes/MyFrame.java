@@ -11,25 +11,32 @@ import java.util.List;
 
 public class MyFrame extends JFrame implements QuizCallback {
 
-    private int score = 0;
+    private static int score = 0;
     private Session session;
     private List<City> cities;
     private List<Capital> capitals;
+    private QuestionPanel questionPanel;
+    private RadiobuttonPanel panel;
+    private String currentQuestion;
+    private List<Capital> currentAnswerOptions;
 
     public MyFrame(String questionText, List<Capital> answerOptions, Capital correctAnswer, Session session, List<City> cities, List<Capital> capitals) {
 
-        QuestionPanel questionPanel = new QuestionPanel(questionText);
-        RadiobuttonPanel panel = new RadiobuttonPanel(answerOptions, correctAnswer, this);
-        BackgroundPanel backgroundPanel = new BackgroundPanel("src/main/resources/background.jpg");
+        this.session = session;
+        this.cities = cities;
+        this.capitals = capitals;
+        this.currentQuestion = questionText;
+        this.currentAnswerOptions = answerOptions;
 
+
+        questionPanel = new QuestionPanel(questionText);
+        panel = new RadiobuttonPanel(answerOptions, correctAnswer, this);
+        BackgroundPanel backgroundPanel = new BackgroundPanel("src/main/resources/background.jpg");
 
         this.setTitle("Guess the capital");
         this.setSize(600, 400);
-        this.cities = cities;
-        this.capitals = capitals;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         this.setLayout(new BorderLayout());
 
         this.setContentPane(backgroundPanel);
@@ -40,25 +47,36 @@ public class MyFrame extends JFrame implements QuizCallback {
         this.setVisible(true);
     }
 
+    private void loadNextQuestion() {
+        WindowEngine.loadNextQuestion(session, cities, capitals);
+    }
+
     @Override
     public void onQuestionAnswered(boolean isCorrect) {
 
         if (isCorrect) {
             score++;
-            System.out.println("Here");
         }
 
-        if (score <= 5) {
-            System.out.println("HEre");
-            System.out.println(score);
-            System.out.println("Cities: " + cities);
-            System.out.println("Capitals: " + capitals);
-            Engine.loadNextQuestion(session, cities, capitals);
+        if (WindowEngine.getCurrentQuestionNumber() < WindowEngine.getTotalQuestions()) {
+            loadNextQuestion();
+            updateFrame();
         } else {
-            // Display the final score
+            // Display final score
             JOptionPane.showMessageDialog(this, "Your final score: " + score + "/5");
             System.exit(0);
         }
+    }
+
+    private void updateFrame() {
+        this.getContentPane().removeAll();  // Remove existing components
+        this.questionPanel = new QuestionPanel(currentQuestion);
+        this.panel = new RadiobuttonPanel(currentAnswerOptions, null, this);
+        this.add(questionPanel, BorderLayout.NORTH);
+        this.add(Box.createRigidArea(new Dimension(20, 20)), BorderLayout.CENTER);
+        this.add(panel, BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
     }
 }
 

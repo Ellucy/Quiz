@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import quiz.panelsframes.MyFrame;
+import quiz.panelsframes.WindowEngine;
 
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class Main {
                 res = scanner.nextLine().toLowerCase().charAt(0);
 
                 if (res == 'w') {
-                    Engine.playWindowGame(session, cities, capitals);
+                    WindowEngine.playWindowGame(session, cities, capitals);
                 } else if (res == 't') {
                     Engine.playTerminalGame(session, cities, capitals);
                 } else {

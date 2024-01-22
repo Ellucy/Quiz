@@ -8,117 +8,72 @@ import java.util.*;
 
 public class Engine {
 
-    public static void playWindowGame(Session session, List<City> cities, List<Capital> capitals) {
-
-//        final int NUM_QUESTIONS = 5;
-//        int score = 0;
-//
-//        Random random = new Random();
-//
-//        City selectedCity = cities.get(random.nextInt(cities.size()));
-//        Capital correctCapital = selectedCity.getCapital();
-//        List<Capital> distractors = getDistractors(capitals, correctCapital);
-//
-//        List<String> options = new ArrayList<>(List.of(correctCapital.getCapitalName(),
-//                distractors.get(0).getCapitalName(), distractors.get(1).getCapitalName(), distractors.get(2).getCapitalName()));
-//
-//        Collections.shuffle(options);
-//
-//        new MyFrame("What is the capital of " + selectedCity.getCityName() + "?", options, correctCapital);
-        loadNextQuestion(session, cities, capitals);
-    }
-
     public static void playTerminalGame(Session session, List<City> cities, List<Capital> capitals) {
 
-            final int NUM_QUESTIONS = 5;
-            Scanner scanner = new Scanner(System.in);
-            int score = 0;
+        final int NUM_QUESTIONS = 5;
+        Scanner scanner = new Scanner(System.in);
+        int score = 0;
 
-            Random random = new Random();
+        Random random = new Random();
 
-            for (int i = 0; i < NUM_QUESTIONS; i++) {
+        for (int i = 0; i < NUM_QUESTIONS; i++) {
 
-                City selectedCity = cities.get(random.nextInt(cities.size()));
+            City selectedCity = cities.get(random.nextInt(cities.size()));
 
-                Capital correctCapital = selectedCity.getCapital();
+            Capital correctCapital = selectedCity.getCapital();
 
-                List<Capital> distractors = getDistractors(capitals, correctCapital);
+            List<Capital> distractors = getDistractors(capitals, correctCapital);
 
-                List<Capital> options = new ArrayList<>(List.of(correctCapital, distractors.get(0), distractors.get(1), distractors.get(2)));
+            List<Capital> options = new ArrayList<>(List.of(correctCapital, distractors.get(0), distractors.get(1), distractors.get(2)));
 
-                // Shuffle four options (correct + 3 distractors)
-                Collections.shuffle(options);
+            // Shuffle four options (correct + 3 distractors)
+            Collections.shuffle(options);
 
-                System.out.println("Question " + (i + 1) + ": What is the capital of " + selectedCity.getCityName() + "? (1/2/3/4)");
-                for (int j = 0; j < options.size(); j++) {
-                    System.out.println((j + 1) + ". " + options.get(j).getCapitalName());
-                }
+            System.out.println("Question " + (i + 1) + ": What is the capital of " + selectedCity.getCityName() + "? (1/2/3/4)");
+            for (int j = 0; j < options.size(); j++) {
+                System.out.println((j + 1) + ". " + options.get(j).getCapitalName());
+            }
 
-                boolean isValid = false;
-                int userChoice = 0;
+            boolean isValid = false;
+            int userChoice = 0;
 
-                while (!isValid) {
-                    try {
-                        userChoice = scanner.nextInt();
-                        if (userChoice >= 1 && userChoice <= options.size()) {
-                            isValid = true;
-                        } else {
-                            System.out.println("Invalid number. Please enter a number between 1 and " + options.size());
-                        }
-                    } catch (InputMismatchException e) {
-                        System.out.println("Invalid input. Please enter a number.");
-                        scanner.next();
+            while (!isValid) {
+                try {
+                    userChoice = scanner.nextInt();
+                    if (userChoice >= 1 && userChoice <= options.size()) {
+                        isValid = true;
+                    } else {
+                        System.out.println("Invalid number. Please enter a number between 1 and " + options.size());
                     }
-                }
-
-
-                // Check if the user's choice is correct
-                if (options.get(userChoice - 1).equals(correctCapital)) {
-                    System.out.println("Correct!\n");
-                    score++;
-                } else {
-                    System.out.println("Incorrect. The correct answer is: " + correctCapital.getCapitalName() + "\n");
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.next();
                 }
             }
 
-            System.out.println("Your score: " + score + "/" + NUM_QUESTIONS);
+
+            // Check if the user's choice is correct
+            if (options.get(userChoice - 1).equals(correctCapital)) {
+                System.out.println("Correct!\n");
+                score++;
+            } else {
+                System.out.println("Incorrect. The correct answer is: " + correctCapital.getCapitalName() + "\n");
+            }
         }
 
-        private static List<Capital> getDistractors(List<Capital> allCapitals, Capital correctCapital) {
-
-            // Shuffle all capitals
-            Collections.shuffle(allCapitals);
-
-            // Remove correct capital
-            allCapitals.remove(correctCapital);
-
-            // Take three capitals as distractors
-            return allCapitals.subList(0, 3);
-        }
-
-    public static void loadNextQuestion(Session session, List<City> cities, List<Capital> capitals) {
-        Random random = new Random();
-
-        City selectedCity = cities.get(random.nextInt(cities.size()));
-        System.out.println(selectedCity.getCityName());
-        Capital correctCapital = selectedCity.getCapital();
-        List<Capital> distractors = getDistractors(capitals, correctCapital);
-
-        QuizQuestion quizQuestion = new QuizQuestion(
-                "What is the capital of " + selectedCity.getCityName() + "?",
-                correctCapital, distractors);
-
-        // Display the new question using the GUI
-        displayQuestion(session, quizQuestion, cities, capitals);
+        System.out.println("Your score: " + score + "/" + NUM_QUESTIONS);
     }
 
-    private static void displayQuestion(Session session, QuizQuestion quizQuestion, List<City> cities, List<Capital> capitals) {
-        // Shuffle the answer options
-        List<Capital> options = quizQuestion.getAnswerOptions();
-        Collections.shuffle(options);
+    private static List<Capital> getDistractors(List<Capital> allCapitals, Capital correctCapital) {
 
-        SwingUtilities.invokeLater(() -> {
-            new MyFrame(quizQuestion.getQuestion(), options, quizQuestion.getCorrectAnswer(), session, cities, capitals);
-        });
+        // Shuffle all capitals
+        Collections.shuffle(allCapitals);
+
+        // Remove correct capital
+        allCapitals.remove(correctCapital);
+
+        // Take three capitals as distractors
+        return allCapitals.subList(0, 3);
     }
+
 }
