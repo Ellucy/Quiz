@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class MyFrame extends JFrame implements QuizCallback {
+public class MyFrame implements QuizCallback {
 
     public static final int FRAME_WIDTH = 650;
     private static int score = 0;
@@ -20,12 +20,13 @@ public class MyFrame extends JFrame implements QuizCallback {
     private List<Capital> capitals;
     private QuestionPanel questionPanel;
     private RadiobuttonPanel panel;
-    private AutoClosePopupPanel popupPanel;
     private String currentQuestion;
     private List<Capital> currentAnswerOptions;
+    private FrameSkeleton theFrame;
 
-    public MyFrame(String questionText, List<Capital> answerOptions, Capital correctAnswer, Session session, List<City> cities, List<Capital> capitals) {
-
+    public MyFrame(FrameSkeleton theFrame, String questionText, List<Capital> answerOptions, Capital correctAnswer, Session session, List<City> cities, List<Capital> capitals) {
+        this.theFrame = theFrame;
+        // this.theFrame.setVisible(false);
         this.session = session;
         this.cities = cities;
         this.capitals = capitals;
@@ -64,29 +65,29 @@ public class MyFrame extends JFrame implements QuizCallback {
         panel = new RadiobuttonPanel(answerOptions, correctAnswer, this);
         BackgroundPanel backgroundPanel = new BackgroundPanel("src/main/resources/background.jpg");
 
-        this.setTitle("Guess the capital");
-        this.setSize(FRAME_WIDTH, 400);
+        this.theFrame.setTitle("Guess the capital");
+        this.theFrame.setSize(FRAME_WIDTH, 400);
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new BorderLayout());
+        this.theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.theFrame.setLayout(new BorderLayout());
 
-        this.setContentPane(backgroundPanel);
-        this.add(questionPanel, BorderLayout.NORTH);
-        this.add(Box.createRigidArea(new Dimension(20, 20)), BorderLayout.CENTER); // Adjust the height as needed
-        this.add(panel, BorderLayout.CENTER);
+        this.theFrame.setContentPane(backgroundPanel);
+        this.theFrame.add(questionPanel, BorderLayout.NORTH);
+        this.theFrame.add(Box.createRigidArea(new Dimension(20, 20)), BorderLayout.CENTER); // Adjust the height as needed
+        this.theFrame.add(panel, BorderLayout.CENTER);
 
-        this.setVisible(true);
+        this.theFrame.setVisible(true);
     }
 
     public void updateFrame() {
-        this.getContentPane().removeAll();
-        this.questionPanel = new QuestionPanel(currentQuestion);
-        this.panel = new RadiobuttonPanel(currentAnswerOptions, null, this);
-        this.add(questionPanel, BorderLayout.NORTH);
-        this.add(Box.createRigidArea(new Dimension(20, 20)), BorderLayout.CENTER);
-        this.add(panel, BorderLayout.CENTER);
-        this.revalidate();
-        this.repaint();
+        this.theFrame.getContentPane().removeAll();
+        this.theFrame.questionPanel = new QuestionPanel(currentQuestion);
+        this.theFrame.panel = new RadiobuttonPanel(currentAnswerOptions, null, this);
+        this.theFrame.add(questionPanel, BorderLayout.NORTH);
+        this.theFrame.add(Box.createRigidArea(new Dimension(20, 20)), BorderLayout.CENTER);
+        this.theFrame.add(panel, BorderLayout.CENTER);
+        this.theFrame.revalidate();
+        this.theFrame.repaint();
         System.out.println("Checking correct flag: " + correct);
     }
 
@@ -126,11 +127,11 @@ public class MyFrame extends JFrame implements QuizCallback {
     private void displayNotification(String message, int duration) {
         AutoClosePopupPanel autoClosePanel = new AutoClosePopupPanel(message, duration);
 
-        JDialog dialog = new JDialog(this, "Notification", Dialog.ModalityType.MODELESS);
+        JDialog dialog = new JDialog(this.theFrame, "Notification", Dialog.ModalityType.MODELESS);
         dialog.setUndecorated(true);
         dialog.getContentPane().add(autoClosePanel);
         dialog.pack();
-        dialog.setLocationRelativeTo(this);
+        dialog.setLocationRelativeTo(this.theFrame);
         dialog.setVisible(true);
     }
 
@@ -147,7 +148,7 @@ public class MyFrame extends JFrame implements QuizCallback {
     }
 
     private void displayDialog() {
-        JOptionPane.showMessageDialog(this, "Your final score: " + score + "/5");
+        JOptionPane.showMessageDialog(this.theFrame, "Your final score: " + score + "/5");
         System.exit(0);
     }
 

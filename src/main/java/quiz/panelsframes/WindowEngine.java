@@ -15,6 +15,7 @@ public class WindowEngine {
     @Getter
     private static int currentQuestionNumber = 0;
     private static Set<City> usedCities = new HashSet<>();
+    private static FrameSkeleton frameSkeleton = new FrameSkeleton();
 
     public static void playWindowGame(Session session, List<City> cities, List<Capital> capitals) {
         loadNextQuestion(session, cities, capitals);
@@ -54,7 +55,8 @@ public class WindowEngine {
         Collections.shuffle(options);
 
         SwingUtilities.invokeLater(() -> {
-            new MyFrame(quizQuestion.getQuestion(), options, quizQuestion.getCorrectAnswer(), session, cities, capitals);
+
+            new MyFrame(frameSkeleton, quizQuestion.getQuestion(), options, quizQuestion.getCorrectAnswer(), session, cities, capitals);
         });
     }
 
