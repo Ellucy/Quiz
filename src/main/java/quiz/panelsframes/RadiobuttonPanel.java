@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Objects;
 
 public class RadiobuttonPanel extends JPanel implements ActionListener {
 
@@ -29,7 +28,7 @@ public class RadiobuttonPanel extends JPanel implements ActionListener {
         this.quizCallback = quizCallback;
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
-        setPreferredSize(new Dimension(600, 150));
+        setPreferredSize(new Dimension(MyFrame.FRAME_WIDTH, 150));
 
         firstButton = new JRadioButton(answerOptions.get(0).getCapitalName());
         secondButton = new JRadioButton(answerOptions.get(1).getCapitalName());

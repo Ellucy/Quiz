@@ -11,7 +11,7 @@ public class QuestionPanel extends JPanel {
         this.question = question;
         Font font = new Font("Arial", Font.BOLD, 36);
         setFont(font);
-        this.setPreferredSize(new Dimension(600, 60));
+        this.setPreferredSize(new Dimension(MyFrame.FRAME_WIDTH, 60));
     }
 
     @Override
