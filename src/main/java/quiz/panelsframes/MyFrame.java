@@ -46,8 +46,6 @@ public class MyFrame implements QuizCallback {
         if (isCorrect) {
             score++;
             correct = true;
-            System.out.println("Correct answer! Setting correct flag to true.");
-
         }
 
         if (WindowEngine.getCurrentQuestionNumber() < WindowEngine.getTotalQuestions()) {
@@ -88,7 +86,6 @@ public class MyFrame implements QuizCallback {
         this.theFrame.add(panel, BorderLayout.CENTER);
         this.theFrame.revalidate();
         this.theFrame.repaint();
-        System.out.println("Checking correct flag: " + correct);
     }
 
     private void delayAndUpdateFrame() {
